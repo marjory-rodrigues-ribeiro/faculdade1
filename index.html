@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>marryhub — Preto & Roxo</title>
+  <style>
+    /* Reset simples */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+
+    /* Tema preto + roxo */
+    :root{
+      --bg:#0b0b0d; /* preto profundo */
+      --card:#0f0b16; /* cartão levemente diferente */
+      --accent-1:#7c3aed; /* roxo vibrante */
+      --accent-2:#5b21b6; /* roxo escuro */
+      --muted:#bfb8e6;
+      --glass: rgba(255,255,255,0.04);
+    }
+
+    body{
+      background: linear-gradient(180deg,var(--bg),#07060a 120%);
+      color:var(--muted);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding-top:72px; /* espaço para header fixo */
+      padding-bottom:72px; /* espaço para footer fixo */
+    }
+
+    /* Header fixo em todas as páginas */
+    header{
+      position:fixed;top:0;left:0;right:0;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;
+      background:linear-gradient(90deg, rgba(15,8,25,0.85), rgba(15,8,25,0.6));backdrop-filter: blur(6px);
+      border-bottom:1px solid rgba(124,58,237,0.14);z-index:1000
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent-1),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;color:white}
+    .brand h1{font-size:18px;color:white}
+    nav{display:flex;gap:12px}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px}
+    nav a:hover{background:var(--glass);color:white}
+
+    /* Footer fixo */
+    footer{position:fixed;left:0;right:0;bottom:0;height:64px;background:linear-gradient(90deg, rgba(15,8,25,0.85), rgba(15,8,25,0.6));display:flex;align-items:center;justify-content:center;border-top:1px solid rgba(124,58,237,0.08)}
+    footer p{color:var(--muted)}
+
+    /* Conteúdo principal */
+    .container{max-width:1200px;margin:40px auto;padding:22px}
+    .hero{display:flex;align-items:center;gap:20px;margin-bottom:22px}
+    .hero .title{flex:1}
+    .hero h2{font-size:28px;color:white;margin-bottom:6px}
+    .hero p{color:var(--muted)}
+
+    /* Filtros / controles */
+    .controls{display:flex;gap:10px;align-items:center;margin:12px 0}
+    .controls select,input{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px;border-radius:10px;color:var(--muted)}
+    .controls button{padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:white;cursor:pointer}
+
+    /* Grid de veículos */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:18px}
+    .card{background:var(--card);border-radius:12px;overflow:hidden;position:relative;box-shadow:0 6px 24px rgba(0,0,0,0.6);border:1px solid rgba(124,58,237,0.06)}
+    .card img{width:100%;height:170px;object-fit:cover;display:block}
+    .card .body{padding:14px}
+    .card h3{color:white;margin-bottom:6px;font-size:18px}
+    .card p{color:var(--muted);font-size:14px}
+
+    /* Ficha fixa em todos os cards (overlay sempre visível) */
+    .ficha{position:absolute;left:12px;bottom:12px;background:linear-gradient(180deg, rgba(20,7,34,0.95), rgba(12,6,18,0.85));padding:10px;border-radius:10px;min-width:calc(100% - 24px);backdrop-filter: blur(4px);border:1px solid rgba(124,58,237,0.12)}
+    .ficha .row{display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .chip{font-weight:600;font-size:13px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02);color:var(--muted)}
+
+    /* Botões da ficha */
+    .ficha .actions{display:flex;gap:10px;margin-top:8px}
+    .ficha button{flex:1;padding:8px;border-radius:8px;border:none;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:white;cursor:pointer}
+    .ficha .secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+
+    /* Modal simples */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,2,6,0.6);z-index:2000}
+    .modal .panel{width:90%;max-width:920px;background:#09070a;border-radius:12px;padding:18px;border:1px solid rgba(124,58,237,0.08)}
+    .modal .panel img{width:100%;height:380px;object-fit:cover;border-radius:8px;margin-bottom:12px}
+
+    /* Responsividade */
+    @media (max-width:640px){
+      .ficha{position:static;margin-top:10px}
+      .card img{height:150px}
+      header{padding:0 12px}
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">MH</div>
+      <div>
+        <h1>marryhub
+        <div style="font-size:12px;color:var(--muted)"> </div>
+      </div>
+    </div>
+    <nav>
+      <a href="#todos">Todos</a>
+      <a href="#motos">Motos</a>
+      <a href="#carros">Carros</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="title">
+        <h2>venda carros e motos</h2>
+        <p></p>
+      </div>
+      <div>
+        <div style="text-align:right">
+          <div style="font-size:12px;color:var(--muted)">Total:</div>
+          <div style="font-weight:700;color:white;font-size:20px" id="totalCount">5</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="controls">
+      <select id="typeFilter">
+        <option value="all">Mostrar: Todos</option>
+        <option value="moto">Só Motos</option>
+        <option value="carro">Só Carros</option>
+      </select>
+      <input id="search" placeholder="Pesquisar por marca ou modelo" />
+      <button id="reset">Limpar</button>
+    </div>
+
+    <section class="grid" id="grid">
+      <!-- Cards gerados por JS -->
+    </section>
+  </main>
+
+  <footer>
+    <p></p>
+  </footer>
+
+  <!-- Modal para detalhes -->
+  <div class="modal" id="modal">
+    <div class="panel">
+      <button id="closeModal" style="float:right;background:transparent;border:none;color:var(--muted);font-size:20px">✕</button>
+      <img id="modalImg" src="" alt="imagem" />
+      <h3 id="modalTitle" style="color:white"></h3>
+      <p id="modalDesc" style="color:var(--muted)"></p>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <div class="chip" id="modalBrand"></div>
+        <div class="chip" id="modalKm"></div>
+        <div class="chip" id="modalColor"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dados: 3 motos e 2 carros
+    const vehicles = [
+      {
+        id:1,type:'moto',brand:'Ducati',model:'Diavel V4',km:'3.500 km',color:'Preto Fosco',price:'R$ 95.000',img:'https://images.unsplash.com/photo-1645818481640-c0be89188521?auto=format&fit=crop&w=1200&q=60',desc:'Ducati Diavel V4 em excelente estado.'
+      },
+      {
+        id:2,type:'moto',brand:'Yamaha',model:'MT-09',km:'18.200 km',color:'Roxo Metálico',price:'R$ 48.000',img:'https://images.unsplash.com/photo-1649027738807-5a0d9fedf6ae?auto=format&fit=crop&w=1200&q=60',desc:'Yamaha MT-09, ágil e muito estável.'
+      },
+      {
+        id:3,type:'moto',brand:'Honda',model:'CB 1000R',km:'9.800 km',color:'Prata',price:'R$ 36.500', img:'https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&w=1200&q=60',desc:'Honda CB1000R, ótima para cidade e viagem.'
+      },
+      {
+        id:4,type:'ferrari portofino',brand:'BMW',model:'M3',km:'320 km',color:'Preto',price:'R$ 3.250',img:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=60',desc:'BMW M3, alto desempenho e muito conforto.'
+      },
+      {
+        id:5,type:'lamborghini',brand:'Mercedes',model:'A 45 AMG',km:'28.900 km',color:'Roxo Perolizado',price:'R$ 280.000',img:'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1200&q=60',desc:'Mercedes A45 AMG, esportivo e compacto.'
+      }
+    ];
+
+    const grid = document.getElementById('grid');
+    const totalCount = document.getElementById('totalCount');
+    const typeFilter = document.getElementById('typeFilter');
+    const search = document.getElementById('search');
+    const reset = document.getElementById('reset');
+
+    function render(list){
+      grid.innerHTML = '';
+      list.forEach(v=>{
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${v.img}" alt="${v.brand} ${v.model}" />
+          <div class="body">
+            <h3>${v.brand} — ${v.model}</h3>
+            <p>${v.price}</p>
+          </div>
+          <div class="ficha" data-id="${v.id}">
+            <div class="row">
+              <div style="display:flex;gap:10px;align-items:center">
+                <div class="chip">Marca: ${v.brand}</div>
+                <div class="chip">Modelo: ${v.model}</div>
+              </div>
+              <div style="text-align:right">
+                <div class="chip">Km: ${v.km}</div>
+                <div class="chip" style="margin-top:6px">Cor: ${v.color}</div>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="verDetalhes" data-id="${v.id}">Ver detalhes</button>
+              <button class="contato secondary" data-id="${v.id}">Contato</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      totalCount.textContent = list.length;
+
+      // Add listeners in batch
+      document.querySelectorAll('.verDetalhes').forEach(btn=>btn.addEventListener('click', openModal));
+      document.querySelectorAll('.contato').forEach(btn=>btn.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id;
+        const v = vehicles.find(x=>x.id==id);
+        alert('Contato solicitado para: '+v.brand+' '+v.model+' — telefone: (xx) xxxxx-xxxx');
+      }));
+    }
+
+    function openModal(e){
+      const id = e.currentTarget.dataset.id;
+      const v = vehicles.find(x=>x.id==id);
+      document.getElementById('modalImg').src = v.img;
+      document.getElementById('modalTitle').textContent = v.brand+' — '+v.model;
+      document.getElementById('modalDesc').textContent = v.desc + ' • Preço: '+v.price;
+      document.getElementById('modalBrand').textContent = v.brand;
+      document.getElementById('modalKm').textContent = v.km;
+      document.getElementById('modalColor').textContent = v.color;
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    document.getElementById('closeModal').addEventListener('click', ()=>document.getElementById('modal').style.display='none');
+    document.getElementById('modal').addEventListener('click',(ev)=>{ if(ev.target.id==='modal') document.getElementById('modal').style.display='none'});
+
+    // Filtro simples
+    function applyFilters(){
+      const type = typeFilter.value;
+      const q = search.value.trim().toLowerCase();
+      let filtered = vehicles.filter(v=>{
+        if(type!=='all' && v.type!==type) return false;
+        if(q && !(v.brand.toLowerCase().includes(q) || v.model.toLowerCase().includes(q))) return false;
+        return true;
+      });
+      render(filtered);
+    }
+
+    typeFilter.addEventListener('change', applyFilters);
+    search.addEventListener('input', applyFilters);
+    reset.addEventListener('click', ()=>{typeFilter.value='all';search.value='';applyFilters();});
+
+    // Inicializa
+    render(vehicles);
+  </script>
+</body>
+</html>
